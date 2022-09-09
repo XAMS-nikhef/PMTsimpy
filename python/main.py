@@ -107,13 +107,13 @@ class PMT:
                                - omega_main(2 * (capital_a + self.size), 2 * capital_b, self.source[2])
                                + omega_main(2 * capital_a, 2 * capital_b, self.source[2])) / 4
 
-            d_omegas = np.append(d_omegas, np.array([d_omega]), axis=0)
+            d_omegas = np.append(d_omegas, np.array([d_omega / (4 * np.pi)]), axis=0)
         d_omegas = np.reshape(d_omegas, (self.dimension, self.dimension))
         return d_omegas
 
 
 # Fill in: (dimension (nxn grid fill in 'n'), size (fill in sector size), source_x, source_y, source_z)
-PMT1 = PMT(2, 24.25, -5.125, 12.125, 12.125)
+PMT1 = PMT(2, 24.25, -12.125, 12.125, 12.125)
 
 data = PMT1.get_d_omega
 print(data)
@@ -123,10 +123,13 @@ def visualization(d):
     fig = plt.figure(figsize=(6, 6))
 
     ax = fig.add_subplot(111)
-    ax.set_title('D_Omega')
+    ax.set_title(r'$d \ \ \Omega$')
 
     plt.imshow(d, interpolation='none')
     ax.set_aspect('equal')
+
+    for (i, j), z in np.ndenumerate(d):
+        ax.text(j, i, '{:0.4f}'.format(z), ha='center', va='center', bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.8'))
 
     plt.axis('off')
 
